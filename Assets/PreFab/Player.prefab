@@ -125,10 +125,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72837e54ae06a4903a5a1f66c6bf0999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 10
-  acc: 0.5
-  slowDown: 0.4
-  jumpSpeed: 7
+  upwardsGravity: 0.7
+  downwardsGravity: 1
+  humanMaxSpeed: 10
+  humanAcc: 0.7
+  humanSlowDownAcc: 0.6
+  humanJumpSpeed: 7
+  monstMaxSpeed: 8
+  monstAcc: 0.4
+  monstSlowDownAcc: 0.3
 --- !u!50 &2690585387430261977
 Rigidbody2D:
   serializedVersion: 4
@@ -145,7 +150,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d1b3e968b50ec499cac8168dd05db581, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
