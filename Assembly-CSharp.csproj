@@ -67,6 +67,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -91,17 +94,14 @@
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>/Users/noah/Desktop/Unity Projects/GlobalGameJam/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Users/noah/Desktop/Unity Projects/2019.3.0f6/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
