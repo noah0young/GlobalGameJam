@@ -386,7 +386,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 26bb6c9406e3d4b259526b195d2cf968, type: 2}
+  - {fileID: 2100000, guid: 9097e204a16754462b1b2da3a357cd7a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -461,7 +461,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.3184713, y: 1}
+    m_SensorSize: {x: 1.315678, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
