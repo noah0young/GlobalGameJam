@@ -6,17 +6,29 @@ public class Player : MonoBehaviour
 {
     public enum PlayerState { Monster, Platformer, Transforming};
     public PlayerState playerState = PlayerState.Platformer;
+    private Animator myAnimator;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
+    public bool onGround; // Is the player on the ground
     public float upwardsGravity = .7f;
-    // the acceleration of gravity when the player is jumping up
+    // The scale of gravity when the player is jumping up
     public float downwardsGravity = 1f;
-    // the acceleration of gravity when the player is falling down
+    // The scale of gravity when the player is falling down
+    public float peakGravity = .5f;
+    // The scale of the gravity at the peak of your jump
+    public LayerMask GROUND_LAYER; // The layer with all objects you can jump off of
+    public float groundCheckLength;
+    // Length of the raycast to check if the player is on the ground.
+    // This must be greater than half the height of the player, since
+    // it starts in the center of the player object
     [Header("Human Movement")]
     public float humanMaxSpeed = 10f;
     public float humanAcc = .5f;
     public float humanSlowDownAcc = .4f;
     public float humanJumpSpeed = 7f;
+    public float extraJumpHeight = 2f;
+    // When you reach the peak of your jump early, this will be extra velocity
+    // to make your jump look like an arc
     [Header("Monster Movement")]
     public float monstMaxSpeed = 8f;
     public float monstAcc = .4f;
@@ -34,6 +46,8 @@ public class Player : MonoBehaviour
         {
             // The code that updates while the player is a platformer
             AdjustGravity();
+            GroundCheck();
+            Jump();
             changeFormStart();
             Move(humanMaxSpeed, humanAcc, humanSlowDownAcc);
         }
@@ -41,6 +55,8 @@ public class Player : MonoBehaviour
         {
             // The code that updates while the player is a monster
             AdjustGravity();
+            GroundCheck();
+            Punch();
             changeFormStart();
             Move(monstMaxSpeed, monstAcc, monstSlowDownAcc);
         }
@@ -54,7 +70,14 @@ public class Player : MonoBehaviour
     private void AdjustGravity()
     {
         Vector2 velocity = myRigidbody.velocity;
-        if (velocity.y > 0)
+        if (velocity.y > 0 && Input.GetKeyUp("j"))
+        {
+            // This will occur when you let go of the jump button
+            velocity.y = extraJumpHeight;
+            myRigidbody.velocity = velocity;
+            myRigidbody.gravityScale = peakGravity;
+        }
+        else if (velocity.y > 0)
         {
             myRigidbody.gravityScale = upwardsGravity;
         }
@@ -110,18 +133,40 @@ public class Player : MonoBehaviour
         myRigidbody.velocity = velocity;
     }
 
+    // Updates the onGround variable based on if the player is on the ground or not
+    // This is determined if they are standing on an object tagged "Ground"
+    private void GroundCheck()
+    {
+        onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
+    }
+
+    // This allows the player to jump when they press j and are on the ground
+    private void Jump()
+    {
+        if (Input.GetKeyDown("j") && onGround)
+        {
+            Vector2 velocity = myRigidbody.velocity;
+            velocity.y = humanJumpSpeed;
+            myRigidbody.velocity = velocity;
+        }
+    }
+
+    private void Punch()
+    {
+        // To be implemented
+    }
+    
     // This will change forms between the monster and the platformer
     private void changeFormStart()
     {
         if (Input.GetKeyDown("k"))
         {
-            //StartCoroutine(changeForms());
+            StartCoroutine(changeForms());
         }
     }
-    /*
+    
     private IEnumerator changeForms()
     {
-
         if (playerState == PlayerState.Platformer)
         {
             playerState = PlayerState.Monster;
@@ -130,5 +175,6 @@ public class Player : MonoBehaviour
         {
             playerState = PlayerState.Platformer;
         }
-    }*/
+        return null;
+    }
 }
