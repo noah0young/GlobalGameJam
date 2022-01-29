@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public enum PlayerState { Monster, Platformer, Transforming};
     public PlayerState playerState = PlayerState.Platformer;
+    public bool canChangeForms = true;
     private Animator myAnimator;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour
     // Length of the raycast to check if the player is on the ground.
     // This must be greater than half the height of the player, since
     // it starts in the center of the player object
+    public float portalPullStrength = 5f;
+    // Strength of the speed you are dragged through the portal
     [Header("General Movement")]
     private bool canMove;
     // Determines if the player can move
@@ -64,7 +67,7 @@ public class Player : MonoBehaviour
             AdjustGravity();
             GroundCheck();
             Jump();
-            //changeFormStart();
+            changeFormStart();
             Move(humanMaxSpeed, humanAcc, humanSlowDownAcc);
         }
         else if (playerState == PlayerState.Monster)
@@ -73,7 +76,7 @@ public class Player : MonoBehaviour
             AdjustGravity();
             GroundCheck();
             Punch();
-            //changeFormStart();
+            changeFormStart();
             Move(monstMaxSpeed, monstAcc, monstSlowDownAcc);
         }
         else if (playerState == PlayerState.Transforming)
@@ -189,9 +192,9 @@ public class Player : MonoBehaviour
     }
     
     // This will change forms between the monster and the platformer
-    /*private void changeFormStart()
+    private void changeFormStart()
     {
-        if (Input.GetKeyDown("k"))
+        if (Input.GetKeyDown("k") && canChangeForms)
         {
             StartCoroutine(changeForms());
         }
@@ -202,13 +205,19 @@ public class Player : MonoBehaviour
         if (playerState == PlayerState.Platformer)
         {
             playerState = PlayerState.Monster;
+            Vector2 velocity = myRigidbody.velocity;
+            if (velocity.y > 0)
+            {
+                velocity.y = 0;
+                myRigidbody.velocity = velocity;
+            }
         }
         else if (playerState == PlayerState.Monster)
         {
             playerState = PlayerState.Platformer;
         }
         return null;
-    }*/
+    }
 
     // Adds 1 health
     public void AddHealth()
@@ -295,6 +304,38 @@ public class Player : MonoBehaviour
     {
         canMove = false;
         yield return new WaitForSeconds(bounceTime);
+        canMove = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "SwitchPortal")
+        {
+            PortalPullStart(collision);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "SwitchPortal")
+        {
+            PortalPullEnd();
+        }
+    }
+
+    private void PortalPullStart(Collider2D collision)
+    {
+        // Pulls you through the portal
+        changeForms();
+        canMove = false;
+        Vector2 velocity = myRigidbody.velocity;
+        Vector2 posDifference = new Vector2 (collision.transform.position.x, 0) - new Vector2(transform.position.x, 0);
+        velocity = posDifference * portalPullStrength * new Vector2(collision.transform.localScale.x, collision.transform.localScale.y);
+        myRigidbody.velocity = velocity;
+    }
+
+    private void PortalPullEnd()
+    {
         canMove = true;
     }
 }
