@@ -33,10 +33,17 @@ public class Player : MonoBehaviour
     public float monstMaxSpeed = 8f;
     public float monstAcc = .4f;
     public float monstSlowDownAcc = .3f;
+    [Header("Health")]
+    public int maxHealth = 3;
+    private int curHealth;
+    private bool invisible = false;
+    public float invisiblityTime = .3f;
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
+        curHealth = maxHealth;
+        invisible = false;
     }
 
     // Update is called once per frame
@@ -176,5 +183,62 @@ public class Player : MonoBehaviour
             playerState = PlayerState.Platformer;
         }
         return null;
+    }
+
+    // Adds 1 health
+    public void AddHealth()
+    {
+        AddHealth(1);
+    }
+
+    // Adds the provided amount of health
+    public void AddHealth(int num)
+    {
+        curHealth += num;
+        if (curHealth > maxHealth)
+        {
+            curHealth = maxHealth;
+            Debug.Log("Added " + num + " Health");
+        }
+    }
+
+    // Removes 1 health
+    public void LoseHealth()
+    {
+        LoseHealth(1);
+    }
+
+    // Removes the provided amount of health
+    public void LoseHealth(int num)
+    {
+        if (!invisible)
+        {
+            curHealth -= num;
+            Debug.Log("Lost " + num + " Health");
+            if (curHealth <= 0)
+            {
+                curHealth = 0;
+                Death();
+            }
+            else
+            {
+                StartCoroutine(Invisiblity());
+            }
+        }
+    }
+
+    private void Death()
+    {
+        Debug.Log("Dead");
+        //To be implemented
+    }
+
+    private IEnumerator Invisiblity()
+    {
+        invisible = true;
+        Debug.Log("Invisibility Start");
+        yield return new WaitForSeconds(invisiblityTime);
+        Debug.Log("Invisibility End");
+        invisible = false;
     }
 }

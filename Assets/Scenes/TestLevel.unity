@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 105131465}
   m_Layer: 8
   m_Name: Floor
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 121024171}
   m_Layer: 8
   m_Name: Floor (3)
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 570826809}
   m_Layer: 8
   m_Name: Floor (1)
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -669,7 +669,7 @@ GameObject:
   - component: {fileID: 864571488}
   m_Layer: 8
   m_Name: Floor (4)
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -768,6 +768,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2690585387208099238, guid: 5e5a33276fbbb43bf9362fcb56c56c7f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 26bb6c9406e3d4b259526b195d2cf968, type: 2}
     - target: {fileID: 2690585387430261958, guid: 5e5a33276fbbb43bf9362fcb56c56c7f,
         type: 3}
       propertyPath: m_Name
@@ -849,7 +854,7 @@ GameObject:
   - component: {fileID: 1148257131}
   m_Layer: 8
   m_Name: Floor (2)
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

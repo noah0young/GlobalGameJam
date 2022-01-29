@@ -142,6 +142,8 @@ MonoBehaviour:
   monstMaxSpeed: 8
   monstAcc: 0.4
   monstSlowDownAcc: 0.3
+  maxHealth: 3
+  invisiblityTime: 1
 --- !u!50 &2690585387430261977
 Rigidbody2D:
   serializedVersion: 4
