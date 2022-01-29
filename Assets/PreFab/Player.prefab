@@ -125,12 +125,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72837e54ae06a4903a5a1f66c6bf0999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upwardsGravity: 0.7
-  downwardsGravity: 1
+  playerState: 1
+  onGround: 0
+  upwardsGravity: 1.3
+  downwardsGravity: 1.7
+  peakGravity: 0.7
+  GROUND_LAYER:
+    serializedVersion: 2
+    m_Bits: 256
+  groundCheckLength: 0
   humanMaxSpeed: 10
   humanAcc: 0.7
   humanSlowDownAcc: 0.6
-  humanJumpSpeed: 7
+  humanJumpSpeed: 10
+  extraJumpHeight: 1
   monstMaxSpeed: 8
   monstAcc: 0.4
   monstSlowDownAcc: 0.3
@@ -154,7 +162,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &2690585387430261978
 BoxCollider2D:
   m_ObjectHideFlags: 0
