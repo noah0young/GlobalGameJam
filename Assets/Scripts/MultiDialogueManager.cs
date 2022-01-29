@@ -32,11 +32,8 @@ public class MultiDialogueManager : MonoBehaviour
         }
 
         displayPanelHuman.SetActive(false);
-        displayTextHuman.color = Color.white;
         displayPanelDemon.SetActive(false);
-        displayTextDemon.color = Color.red;
         displayPanelWitch.SetActive(false);
-        displayTextWitch.color = Color.magenta;
 
     }
 
