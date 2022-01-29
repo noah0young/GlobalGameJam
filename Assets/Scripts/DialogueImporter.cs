@@ -28,7 +28,30 @@ public class DialogueImporter : MonoBehaviour
     {
         if (currentLine < textLines.Length)
         {
-            displayText.text = textLines[currentLine];
+
+            // Really these should only be set one time when the button is pressed, but I lazy
+            string currentTextLine = textLines[currentLine];
+
+            displayText.text = currentTextLine.Substring(2);
+
+
+            char characterIndicator = currentTextLine[0];
+
+            switch(characterIndicator){
+                case 'h':
+                    displayText.color = Color.white;
+                    break;
+                case 'd':
+                    displayText.color = Color.red;
+                    break;
+                case 'w':
+                    displayText.color = Color.magenta;
+                    break;
+                default:
+                    displayText.text = "Yo, check your indicators!";
+                    break;
+            }
+
         }
         else
         {
