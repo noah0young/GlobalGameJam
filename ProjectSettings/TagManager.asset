@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Spikes
   - SwitchPortal
+  - Ground
+  - Pillar
   layers:
   - Default
   - TransparentFX
