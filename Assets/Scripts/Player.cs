@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     private bool invinicibility = false;
     public float invinicibilityTime = .3f;
     [Header("Model")]
+    private Animator fullModelAnim;
     private Transform playerModel;
     // This is an empty that holds the other models
     private Transform platformerModel;
@@ -72,6 +73,7 @@ public class Player : MonoBehaviour
         //Sets animation
         platformerAnim = platformerModel.GetComponent<Animator>();
         monsterAnim = monsterModel.GetComponent<Animator>();
+        fullModelAnim = GetComponent<Animator>();
         platformerAnim.SetBool("moving", false);
         monsterAnim.SetBool("moving", false);
         SetModel();
@@ -80,7 +82,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateAnimation();
+        //UpdateAnimation();
         if (playerState == PlayerState.Platformer)
         {
             // The code that updates while the player is a platformer
@@ -132,6 +134,7 @@ public class Player : MonoBehaviour
         if (canMove)
         {
             float direction = Input.GetAxis("Horizontal");
+            UpdateAnimation(direction);
             monsterAnim.SetFloat("speed", Mathf.Abs(direction)); // sets walk speed
             platformerAnim.SetFloat("speed", Mathf.Abs(direction)); // sets walk speed
             Vector2 velocity = myRigidbody.velocity;
@@ -247,10 +250,10 @@ public class Player : MonoBehaviour
     }
 
     // Updates the animation based on if the player is moving or is still
-    private void UpdateAnimation()
+    private void UpdateAnimation(float direction)
     {
-        Vector2 velocity = myRigidbody.velocity;
-        if (velocity.x != 0)
+        //Vector2 velocity = myRigidbody.velocity;
+        if (direction != 0)
         {
             platformerAnim.SetBool("moving", true);
             monsterAnim.SetBool("moving", true);
@@ -357,9 +360,9 @@ public class Player : MonoBehaviour
     private IEnumerator Invinicibility()
     {
         invinicibility = true;
-        Debug.Log("Invinicibility Start");
+        fullModelAnim.SetBool("invincible", true);
         yield return new WaitForSeconds(invinicibilityTime);
-        Debug.Log("Invinicibility End");
+        fullModelAnim.SetBool("invincible", false);
         invinicibility = false;
     }
 
