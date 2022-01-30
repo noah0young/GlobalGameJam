@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     public enum PlayerState { Monster, Platformer };//, Transforming};
     public PlayerState playerState = PlayerState.Platformer;
     public bool canChangeForms = true;
+    private bool jumpPressed = false;
+    private bool jumpReleased = false;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
     private bool onGround; // Is the player on the ground
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour
     private void AdjustGravity()
     {
         Vector2 velocity = myRigidbody.velocity;
-        if (velocity.y > 0 && Input.GetKeyUp("j"))
+        if (velocity.y > 0 && JumpReleased())
         {
             // This will occur when you let go of the jump button
             velocity.y = extraJumpHeight;
@@ -212,10 +214,44 @@ public class Player : MonoBehaviour
         }
     }
 
+    private bool JumpPressed()
+    {
+        jumpPressed = jumpPressed || Input.GetKeyDown("j") || Input.GetKeyDown("x") || Input.GetKeyDown("w") || Input.GetKeyDown("up") || Input.GetKeyDown("space");
+        return jumpPressed;
+    }
+
+    private bool JumpReleased()
+    {
+        if (jumpPressed)
+        {
+            jumpReleased = !(Input.GetKey("j") || Input.GetKey("x") || Input.GetKey("w") || Input.GetKey("up") || Input.GetKey("space"));
+            if (jumpReleased)
+            {
+                jumpPressed = false;
+            }
+        }
+        else
+        {
+            jumpReleased = false;
+        }
+        
+        return jumpReleased;
+    }
+
+    private bool PunchPressed()
+    {
+        return Input.GetKeyDown("j") || Input.GetKeyDown("x") || Input.GetKeyDown("space");
+    }
+
+    private bool SwitchPressed()
+    {
+        return Input.GetKeyDown("k") || Input.GetKeyDown("z");
+    }
+
     // This allows the player to jump when they press j and are on the ground
     private void Jump()
     {
-        if (Input.GetKeyDown("j") && onGround && canMove)
+        if (JumpPressed() && onGround && canMove)
         {
             Vector2 velocity = myRigidbody.velocity;
             velocity.y = humanJumpSpeed;
@@ -227,7 +263,7 @@ public class Player : MonoBehaviour
     private PunchStateEnum punchState = PunchStateEnum.PunchEnded;
     private void Punch()
     {
-        if (Input.GetKeyDown("j") && punchState != PunchStateEnum.MidPunch)
+        if (PunchPressed() && punchState != PunchStateEnum.MidPunch)
         {
             monsterAnim.SetTrigger("punch");
             Vector2 velocity = myRigidbody.velocity;
@@ -268,7 +304,7 @@ public class Player : MonoBehaviour
     // This will change forms between the monster and the platformer
     private void changeFormStart()
     {
-        if (Input.GetKeyDown("k") && canChangeForms && canMove)
+        if (SwitchPressed() && canChangeForms && canMove)
         {
             changeForms();
             //StartCoroutine(changeForms());
