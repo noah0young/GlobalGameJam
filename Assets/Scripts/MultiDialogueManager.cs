@@ -89,7 +89,14 @@ public class MultiDialogueManager : MonoBehaviour
             currentLine = 0;
 
             int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
-            SceneManager.LoadScene(nextScene);
+            if (SceneManager.sceneCountInBuildSettings > nextScene)
+            {
+                SceneManager.LoadScene(nextScene);
+            }
+            else
+            {
+                SceneManager.LoadScene("Menu");
+            }
         }
 
         if (Input.anyKeyDown)

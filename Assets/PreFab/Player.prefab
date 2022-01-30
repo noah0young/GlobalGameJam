@@ -139,8 +139,8 @@ MonoBehaviour:
   bounce: {x: 8, y: 4}
   bounceTime: 0.2
   humanMaxSpeed: 10
-  humanAcc: 0.7
-  humanSlowDownAcc: 0.6
+  humanAcc: 2
+  humanSlowDownAcc: 1
   humanJumpSpeed: 10
   extraJumpHeight: 1
   monstMaxSpeed: 8
