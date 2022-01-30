@@ -338,6 +338,7 @@ public class Player : MonoBehaviour
         {
             changeForms();
             //StartCoroutine(changeForms());
+            Debug.Log("Swap");
         }
     }
     
