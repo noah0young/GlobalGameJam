@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum PlayerState { Monster, Platformer, Transforming};
+    public enum PlayerState { Monster, Platformer };//, Transforming};
     public PlayerState playerState = PlayerState.Platformer;
     public bool canChangeForms = true;
-    private Animator myAnimator;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
     private bool onGround; // Is the player on the ground
@@ -18,6 +17,8 @@ public class Player : MonoBehaviour
     public float peakGravity = .5f;
     // The scale of the gravity at the peak of your jump
     public LayerMask GROUND_LAYER; // The layer with all objects you can jump off of
+    public float groundCheckWidth = .9f;
+    // Width of the raycast to check if the player is on the ground.
     public float groundCheckLength;
     // Length of the raycast to check if the player is on the ground.
     // This must be greater than half the height of the player, since
@@ -48,19 +49,38 @@ public class Player : MonoBehaviour
     private int curHealth;
     private bool invisible = false;
     public float invisiblityTime = .3f;
+    [Header("Model")]
+    private Transform playerModel;
+    // This is an empty that holds the other models
+    private Transform platformerModel;
+    private Transform monsterModel;
     // Start is called before the first frame update
+    private Animator monsterAnim;
+    private Animator platformerAnim;
     void Start()
     {
+        // Sets up models
+        playerModel = transform.Find("FullModel");
+        platformerModel = transform.Find("FullModel/PlatformerModel");
+        monsterModel = transform.Find("FullModel/MonsterModel");
+        // Sets variable values
         myRigidbody = GetComponent<Rigidbody2D>();
         curHealth = maxHealth;
         invisible = false;
         facingRight = true;
         canMove = true;
+        //Sets animation
+        platformerAnim = platformerModel.GetComponent<Animator>();
+        monsterAnim = monsterModel.GetComponent<Animator>();
+        platformerAnim.SetBool("moving", false);
+        monsterAnim.SetBool("moving", false);
+        SetModel();
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateAnimation();
         if (playerState == PlayerState.Platformer)
         {
             // The code that updates while the player is a platformer
@@ -79,10 +99,10 @@ public class Player : MonoBehaviour
             changeFormStart();
             Move(monstMaxSpeed, monstAcc, monstSlowDownAcc);
         }
-        else if (playerState == PlayerState.Transforming)
+        /*else if (playerState == PlayerState.Transforming)
         {
             // The player cannot do anything while transforming
-        }
+        }*/
     }
 
     // Applies gravity to the player
@@ -112,6 +132,8 @@ public class Player : MonoBehaviour
         if (canMove)
         {
             float direction = Input.GetAxis("Horizontal");
+            monsterAnim.SetFloat("speed", Mathf.Abs(direction)); // sets walk speed
+            platformerAnim.SetFloat("speed", Mathf.Abs(direction)); // sets walk speed
             Vector2 velocity = myRigidbody.velocity;
             if (direction == 0)
             {
@@ -161,10 +183,12 @@ public class Player : MonoBehaviour
         if (velocityX > 0)
         {
             facingRight = true;
+            playerModel.transform.localScale = new Vector3(1, 1, 1);
         }
         else if (velocityX < 0)
         {
             facingRight = false;
+            playerModel.transform.localScale = new Vector3(-1, 1, 1);
         }
     }
 
@@ -173,12 +197,22 @@ public class Player : MonoBehaviour
     private void GroundCheck()
     {
         onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
+        //Collider2D myCollider = GetComponent<Collider2D>();
+        //onGround = Physics2D.BoxCast(transform.position, myCollider.bounds.size, 0, Vector2.down, groundCheckLength, GROUND_LAYER);
+        if (!onGround)
+        {
+            platformerAnim.SetBool("inAir", true);
+        }
+        else
+        {
+            platformerAnim.SetBool("inAir", false);
+        }
     }
 
     // This allows the player to jump when they press j and are on the ground
     private void Jump()
     {
-        if (Input.GetKeyDown("j") && onGround)
+        if (Input.GetKeyDown("j") && onGround && canMove)
         {
             Vector2 velocity = myRigidbody.velocity;
             velocity.y = humanJumpSpeed;
@@ -188,19 +222,47 @@ public class Player : MonoBehaviour
 
     private void Punch()
     {
-        // To be implemented
+        if (Input.GetKeyDown("j") && canMove)
+        {
+            monsterAnim.SetTrigger("punch");
+            Vector2 velocity = myRigidbody.velocity;
+            velocity.x = 0;
+            myRigidbody.velocity = velocity;
+            canMove = false;
+        }
+        if (monsterAnim.GetCurrentAnimatorStateInfo(0).IsName("MonsterIdle"))
+        {
+            canMove = true;
+        }
     }
-    
+
+    // Updates the animation based on if the player is moving or is still
+    private void UpdateAnimation()
+    {
+        Vector2 velocity = myRigidbody.velocity;
+        if (velocity.x != 0)
+        {
+            platformerAnim.SetBool("moving", true);
+            monsterAnim.SetBool("moving", true);
+        }
+        else
+        {
+            platformerAnim.SetBool("moving", false);
+            monsterAnim.SetBool("moving", false);
+        }
+    }
+
     // This will change forms between the monster and the platformer
     private void changeFormStart()
     {
-        if (Input.GetKeyDown("k") && canChangeForms)
+        if (Input.GetKeyDown("k") && canChangeForms && canMove)
         {
-            StartCoroutine(changeForms());
+            changeForms();
+            //StartCoroutine(changeForms());
         }
     }
     
-    private IEnumerator changeForms()
+    private void changeForms()
     {
         if (playerState == PlayerState.Platformer)
         {
@@ -216,7 +278,22 @@ public class Player : MonoBehaviour
         {
             playerState = PlayerState.Platformer;
         }
-        return null;
+        SetModel();
+        //return null;
+    }
+
+    private void SetModel()
+    {
+        if (playerState == PlayerState.Platformer)
+        {
+            monsterModel.gameObject.SetActive(false);
+            platformerModel.gameObject.SetActive(true);
+        }
+        else if (playerState == PlayerState.Monster)
+        {
+            platformerModel.gameObject.SetActive(false);
+            monsterModel.gameObject.SetActive(true);
+        }
     }
 
     // Adds 1 health
@@ -330,6 +407,14 @@ public class Player : MonoBehaviour
         canMove = false;
         Vector2 velocity = myRigidbody.velocity;
         Vector2 posDifference = new Vector2 (collision.transform.position.x, 0) - new Vector2(transform.position.x, 0);
+        if (posDifference.x > 0)
+        {
+            posDifference.x = 1;
+        }
+        else
+        {
+            posDifference.x = -1;
+        }
         velocity = posDifference * portalPullStrength * new Vector2(collision.transform.localScale.x, collision.transform.localScale.y);
         myRigidbody.velocity = velocity;
     }
