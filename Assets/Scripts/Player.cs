@@ -17,9 +17,9 @@ public class Player : MonoBehaviour
     public float peakGravity = .5f;
     // The scale of the gravity at the peak of your jump
     public LayerMask GROUND_LAYER; // The layer with all objects you can jump off of
-    public float groundCheckWidth = .9f;
-    // Width of the raycast to check if the player is on the ground.
-    public float groundCheckLength;
+    public float jumpCheckBoxOffset = .1f;
+    // The offset that the jump check box is moved down
+    //public float groundCheckLength;
     // Length of the raycast to check if the player is on the ground.
     // This must be greater than half the height of the player, since
     // it starts in the center of the player object
@@ -47,8 +47,8 @@ public class Player : MonoBehaviour
     [Header("Health")]
     public int maxHealth = 3;
     private int curHealth;
-    private bool invisible = false;
-    public float invisiblityTime = .3f;
+    private bool invinicibility = false;
+    public float invinicibilityTime = .3f;
     [Header("Model")]
     private Transform playerModel;
     // This is an empty that holds the other models
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
         // Sets variable values
         myRigidbody = GetComponent<Rigidbody2D>();
         curHealth = maxHealth;
-        invisible = false;
+        invinicibility = false;
         facingRight = true;
         canMove = true;
         //Sets animation
@@ -196,9 +196,9 @@ public class Player : MonoBehaviour
     // This is determined if they are standing on an object tagged "Ground"
     private void GroundCheck()
     {
-        onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
-        //Collider2D myCollider = GetComponent<Collider2D>();
-        //onGround = Physics2D.BoxCast(transform.position, myCollider.bounds.size, 0, Vector2.down, groundCheckLength, GROUND_LAYER);
+        //onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
+        Collider2D myCollider = GetComponent<Collider2D>();
+        onGround = Physics2D.BoxCast(transform.position, myCollider.bounds.size, 0, Vector2.down, jumpCheckBoxOffset, GROUND_LAYER);
         if (!onGround)
         {
             platformerAnim.SetBool("inAir", true);
@@ -322,7 +322,7 @@ public class Player : MonoBehaviour
     // Removes the provided amount of health
     public void LoseHealth(int num)
     {
-        if (!invisible)
+        if (!invinicibility)
         {
             curHealth -= num;
             Debug.Log("Lost " + num + " Health");
@@ -333,7 +333,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Invisiblity());
+                StartCoroutine(Invinicibility());
             }
         }
     }
@@ -344,13 +344,13 @@ public class Player : MonoBehaviour
         //To be implemented
     }
 
-    private IEnumerator Invisiblity()
+    private IEnumerator Invinicibility()
     {
-        invisible = true;
-        Debug.Log("Invisibility Start");
-        yield return new WaitForSeconds(invisiblityTime);
-        Debug.Log("Invisibility End");
-        invisible = false;
+        invinicibility = true;
+        Debug.Log("Invinicibility Start");
+        yield return new WaitForSeconds(invinicibilityTime);
+        Debug.Log("Invinicibility End");
+        invinicibility = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 2690585387430261959}
   - component: {fileID: 2690585387430261977}
   - component: {fileID: 2690585387430261978}
+  - component: {fileID: 8742290901970209089}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -133,8 +134,7 @@ MonoBehaviour:
   GROUND_LAYER:
     serializedVersion: 2
     m_Bits: 256
-  groundCheckWidth: 0.9
-  groundCheckLength: 1.1
+  jumpCheckBoxOffset: 0.1
   portalPullStrength: 5
   bounce: {x: 8, y: 4}
   bounceTime: 0.2
@@ -147,7 +147,7 @@ MonoBehaviour:
   monstAcc: 0.4
   monstSlowDownAcc: 0.3
   maxHealth: 3
-  invisiblityTime: 1
+  invinicibilityTime: 0.3
 --- !u!50 &2690585387430261977
 Rigidbody2D:
   serializedVersion: 4
@@ -195,6 +195,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.25}
   m_EdgeRadius: 0
+--- !u!95 &8742290901970209089
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2690585387430261958}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4216418040539345248
 GameObject:
   m_ObjectHideFlags: 0
