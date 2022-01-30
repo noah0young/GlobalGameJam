@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
     private Animator platformerAnim;
     void Start()
     {
-        musicSystem = transform.Find("/MusicSystem").GetComponent<MusicSystem>();
+        musicSystem = transform.Find("/CameraAndPlayer/MusicSystem").GetComponent<MusicSystem>();
         // Sets up models
         playerModel = transform.Find("FullModel");
         platformerModel = transform.Find("FullModel/PlatformerModel");
