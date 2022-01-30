@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: ce91c474835c67e48a6bb64f34a1171f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PP Rader
+  fontNames:
+  - PP Rader
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 51e93550422a77e42be7402f1fac53ae, type: 3}
+  - {fileID: 12800000, guid: a4cb8b32408a8844384b8fd5f9c4b749, type: 3}
+  - {fileID: 12800000, guid: 94655e8861976ab44a462a7181f569b1, type: 3}
+  - {fileID: 12800000, guid: f4b0b56af3199fa4f96a0f4e6087eabb, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
