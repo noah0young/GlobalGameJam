@@ -10,7 +10,7 @@ public class Lever : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
+        if(collision.gameObject.CompareTag("Player") && Input.GetKey(KeyCode.E))
         {
             Debug.Log("Test");
             Activate();
