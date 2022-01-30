@@ -427,7 +427,7 @@ PrefabInstance:
     - target: {fileID: 9095689027482485241, guid: 8d97ffc985bde4515954997517ec75c2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.39
+      value: -8.390001
       objectReference: {fileID: 0}
     - target: {fileID: 9095689027945468571, guid: 8d97ffc985bde4515954997517ec75c2,
         type: 3}
@@ -512,7 +512,7 @@ PrefabInstance:
     - target: {fileID: 9095689028567917512, guid: 8d97ffc985bde4515954997517ec75c2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.39
+      value: -8.390001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d97ffc985bde4515954997517ec75c2, type: 3}
@@ -17920,6 +17920,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2003235543}
   - component: {fileID: 2003235544}
+  - component: {fileID: 2003235545}
   m_Layer: 0
   m_Name: Basic_bg
   m_TagString: Untagged
@@ -17984,13 +17985,28 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 20, y: 11.25}
+  m_DrawMode: 2
+  m_Size: {x: 200, y: 11.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2003235545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003235542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42dd84b6a5be4ff41b3433e47b38e9e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundPosition: {fileID: 0}
+  parallaxScalingX: -0.1
+  parallaxScalingY: -0.02
 --- !u!1001 &6279267236734976250
 PrefabInstance:
   m_ObjectHideFlags: 0
