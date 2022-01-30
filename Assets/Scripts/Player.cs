@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     public float monstSlowDownAcc = .3f;
     [Header("Health")]
     public int maxHealth = 3;
-    private int curHealth;
+    public int curHealth;
     private bool invinicibility = false;
     public float invinicibilityTime = .3f;
     [Header("Model")]
