@@ -178,7 +178,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3744243616725114088}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8718ddd90140a49c78b2b910e3a5b3a0, type: 2}
   m_CullingMode: 0
@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26be81ebe1fb4f44b91a42aa74af574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
   projectileDelay: 0.6
   projectilePauseTime: 1
   projectile: {fileID: 2811312507018743102, guid: 40dcc3d12317a4b9ea1b9891277cd6e3,

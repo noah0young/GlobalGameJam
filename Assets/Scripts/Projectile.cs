@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        velocity = transform.Find("/Player").position - transform.position;
+        velocity = transform.Find("/CameraAndPlayer/Player").position - transform.position;
         velocity = velocity.normalized * speed;
         myRigidbody.velocity = velocity;
         StartCoroutine(timer());

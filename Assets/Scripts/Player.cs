@@ -7,6 +7,10 @@ public class Player : MonoBehaviour
     public enum PlayerState { Monster, Platformer };//, Transforming};
     public PlayerState playerState = PlayerState.Platformer;
     public bool canChangeForms = true;
+    private bool jumpPressed = false;
+    private bool jumpReleased = false;
+    private bool playingFootsteps;
+    private MusicSystem musicSystem;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
     private bool onGround; // Is the player on the ground
@@ -60,6 +64,7 @@ public class Player : MonoBehaviour
     private Animator platformerAnim;
     void Start()
     {
+        musicSystem = transform.Find("/MusicSystem").GetComponent<MusicSystem>();
         // Sets up models
         playerModel = transform.Find("FullModel");
         platformerModel = transform.Find("FullModel/PlatformerModel");
@@ -111,7 +116,7 @@ public class Player : MonoBehaviour
     private void AdjustGravity()
     {
         Vector2 velocity = myRigidbody.velocity;
-        if (velocity.y > 0 && Input.GetKeyUp("j"))
+        if (velocity.y > 0 && JumpReleased())
         {
             // This will occur when you let go of the jump button
             velocity.y = extraJumpHeight;
@@ -161,6 +166,7 @@ public class Player : MonoBehaviour
             else if (direction > 0)
             {
                 // Increases velocity forwards
+                StartCoroutine(playFootsteps());
                 velocity.x += acc;
                 if (velocity.x > maxSpeed)
                 {
@@ -170,6 +176,7 @@ public class Player : MonoBehaviour
             else if (direction < 0)
             {
                 // Increases velocity backwards
+                StartCoroutine(playFootsteps());
                 velocity.x -= acc;
                 if (velocity.x < -maxSpeed)
                 {
@@ -194,11 +201,30 @@ public class Player : MonoBehaviour
             playerModel.transform.localScale = new Vector3(-1, 1, 1);
         }
     }
+    
+    private IEnumerator playFootsteps()
+    {
+        if (!playingFootsteps && canMove && onGround)
+        {
+            playingFootsteps = true;
+            if (playerState == PlayerState.Platformer)
+            {
+                musicSystem.playFootsteps(true);
+            }
+            else if (playerState == PlayerState.Monster)
+            {
+                musicSystem.playFootsteps(false);
+            }
+            yield return new WaitUntil(() => (musicSystem.footsteps.isPlaying == false));
+            playingFootsteps = false;
+        }
+    }
 
     // Updates the onGround variable based on if the player is on the ground or not
     // This is determined if they are standing on an object tagged "Ground"
     private void GroundCheck()
     {
+        bool prevOnGround = onGround;
         //onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
         Collider2D myCollider = GetComponent<Collider2D>();
         onGround = Physics2D.BoxCast(transform.position, myCollider.bounds.size, 0, Vector2.down, jumpCheckBoxOffset, GROUND_LAYER);
@@ -209,14 +235,53 @@ public class Player : MonoBehaviour
         else
         {
             platformerAnim.SetBool("inAir", false);
+            if (!prevOnGround)
+            {
+                musicSystem.playJumpLand();
+            }
         }
+    }
+
+    private bool JumpPressed()
+    {
+        jumpPressed = jumpPressed || Input.GetKeyDown("j") || Input.GetKeyDown("x") || Input.GetKeyDown("w") || Input.GetKeyDown("up") || Input.GetKeyDown("space");
+        return jumpPressed;
+    }
+
+    private bool JumpReleased()
+    {
+        if (jumpPressed)
+        {
+            jumpReleased = !(Input.GetKey("j") || Input.GetKey("x") || Input.GetKey("w") || Input.GetKey("up") || Input.GetKey("space"));
+            if (jumpReleased)
+            {
+                jumpPressed = false;
+            }
+        }
+        else
+        {
+            jumpReleased = false;
+        }
+        
+        return jumpReleased;
+    }
+
+    private bool PunchPressed()
+    {
+        return Input.GetKeyDown("j") || Input.GetKeyDown("x") || Input.GetKeyDown("space");
+    }
+
+    private bool SwitchPressed()
+    {
+        return Input.GetKeyDown("k") || Input.GetKeyDown("z");
     }
 
     // This allows the player to jump when they press j and are on the ground
     private void Jump()
     {
-        if (Input.GetKeyDown("j") && onGround && canMove)
+        if (JumpPressed() && onGround && canMove)
         {
+            musicSystem.playJumpUp();
             Vector2 velocity = myRigidbody.velocity;
             velocity.y = humanJumpSpeed;
             myRigidbody.velocity = velocity;
@@ -227,9 +292,10 @@ public class Player : MonoBehaviour
     private PunchStateEnum punchState = PunchStateEnum.PunchEnded;
     private void Punch()
     {
-        if (Input.GetKeyDown("j") && punchState != PunchStateEnum.MidPunch)
+        if (PunchPressed() && punchState != PunchStateEnum.MidPunch)
         {
             monsterAnim.SetTrigger("punch");
+            musicSystem.playPunch();
             Vector2 velocity = myRigidbody.velocity;
             velocity.x = 0;
             myRigidbody.velocity = velocity;
@@ -268,7 +334,7 @@ public class Player : MonoBehaviour
     // This will change forms between the monster and the platformer
     private void changeFormStart()
     {
-        if (Input.GetKeyDown("k") && canChangeForms && canMove)
+        if (SwitchPressed() && canChangeForms && canMove)
         {
             changeForms();
             //StartCoroutine(changeForms());
@@ -340,6 +406,14 @@ public class Player : MonoBehaviour
         {
             curHealth -= num;
             Debug.Log("Lost " + num + " Health");
+            if (playerState == PlayerState.Platformer)
+            {
+                musicSystem.playVocal(true);
+            }
+            else if (playerState == PlayerState.Monster)
+            {
+                musicSystem.playVocal(false);
+            }
             if (curHealth <= 0)
             {
                 curHealth = 0;
