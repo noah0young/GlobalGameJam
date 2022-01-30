@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public bool canChangeForms = true;
     private bool jumpPressed = false;
     private bool jumpReleased = false;
+    private bool playingFootsteps;
+    private MusicSystem musicSystem;
     [Header("General Physics")]
     private Rigidbody2D myRigidbody;
     private bool onGround; // Is the player on the ground
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
     private Animator platformerAnim;
     void Start()
     {
+        musicSystem = transform.Find("/MusicSystem").GetComponent<MusicSystem>();
         // Sets up models
         playerModel = transform.Find("FullModel");
         platformerModel = transform.Find("FullModel/PlatformerModel");
@@ -163,6 +166,7 @@ public class Player : MonoBehaviour
             else if (direction > 0)
             {
                 // Increases velocity forwards
+                StartCoroutine(playFootsteps());
                 velocity.x += acc;
                 if (velocity.x > maxSpeed)
                 {
@@ -172,6 +176,7 @@ public class Player : MonoBehaviour
             else if (direction < 0)
             {
                 // Increases velocity backwards
+                StartCoroutine(playFootsteps());
                 velocity.x -= acc;
                 if (velocity.x < -maxSpeed)
                 {
@@ -196,11 +201,30 @@ public class Player : MonoBehaviour
             playerModel.transform.localScale = new Vector3(-1, 1, 1);
         }
     }
+    
+    private IEnumerator playFootsteps()
+    {
+        if (!playingFootsteps && canMove && onGround)
+        {
+            playingFootsteps = true;
+            if (playerState == PlayerState.Platformer)
+            {
+                musicSystem.playFootsteps(true);
+            }
+            else if (playerState == PlayerState.Monster)
+            {
+                musicSystem.playFootsteps(false);
+            }
+            yield return new WaitUntil(() => (musicSystem.footsteps.isPlaying == false));
+            playingFootsteps = false;
+        }
+    }
 
     // Updates the onGround variable based on if the player is on the ground or not
     // This is determined if they are standing on an object tagged "Ground"
     private void GroundCheck()
     {
+        bool prevOnGround = onGround;
         //onGround = Physics2D.Raycast(transform.position, Vector2.down, groundCheckLength, GROUND_LAYER, 0);
         Collider2D myCollider = GetComponent<Collider2D>();
         onGround = Physics2D.BoxCast(transform.position, myCollider.bounds.size, 0, Vector2.down, jumpCheckBoxOffset, GROUND_LAYER);
@@ -211,6 +235,10 @@ public class Player : MonoBehaviour
         else
         {
             platformerAnim.SetBool("inAir", false);
+            if (!prevOnGround)
+            {
+                musicSystem.playJumpLand();
+            }
         }
     }
 
@@ -253,6 +281,7 @@ public class Player : MonoBehaviour
     {
         if (JumpPressed() && onGround && canMove)
         {
+            musicSystem.playJumpUp();
             Vector2 velocity = myRigidbody.velocity;
             velocity.y = humanJumpSpeed;
             myRigidbody.velocity = velocity;
@@ -266,6 +295,7 @@ public class Player : MonoBehaviour
         if (PunchPressed() && punchState != PunchStateEnum.MidPunch)
         {
             monsterAnim.SetTrigger("punch");
+            musicSystem.playPunch();
             Vector2 velocity = myRigidbody.velocity;
             velocity.x = 0;
             myRigidbody.velocity = velocity;
@@ -375,6 +405,14 @@ public class Player : MonoBehaviour
         {
             curHealth -= num;
             Debug.Log("Lost " + num + " Health");
+            if (playerState == PlayerState.Platformer)
+            {
+                musicSystem.playVocal(true);
+            }
+            else if (playerState == PlayerState.Monster)
+            {
+                musicSystem.playVocal(false);
+            }
             if (curHealth <= 0)
             {
                 curHealth = 0;

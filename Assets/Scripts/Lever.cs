@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Lever : MonoBehaviour
 {
+    private Animator anim;
     public GameObject[] pairedObjects;
     private bool inRange;
 
@@ -18,6 +19,8 @@ public class Lever : MonoBehaviour
 
     private void Activate()
     {
+        anim = GetComponentInChildren<Animator>();
+        anim.SetTrigger("PullLever");
         for (int i = 0; i < pairedObjects.Length; i++)
         {
             GameObject pairedObject = pairedObjects[i];
