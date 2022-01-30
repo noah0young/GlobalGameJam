@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown("k"))
         {
             //StartCoroutine(changeForms());
+            Debug.Log("Swap");
         }
     }
     /*
