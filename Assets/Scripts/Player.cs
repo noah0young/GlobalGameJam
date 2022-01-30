@@ -220,19 +220,29 @@ public class Player : MonoBehaviour
         }
     }
 
+    enum PunchStateEnum {Windup, MidPunch, PunchEnded};
+    private PunchStateEnum punchState = PunchStateEnum.PunchEnded;
     private void Punch()
     {
-        if (Input.GetKeyDown("j") && canMove)
+        if (Input.GetKeyDown("j") && punchState != PunchStateEnum.MidPunch)
         {
             monsterAnim.SetTrigger("punch");
             Vector2 velocity = myRigidbody.velocity;
             velocity.x = 0;
             myRigidbody.velocity = velocity;
             canMove = false;
+            punchState = PunchStateEnum.Windup;
+            Debug.Log("ActivatingPunch");
         }
-        if (monsterAnim.GetCurrentAnimatorStateInfo(0).IsName("MonsterIdle"))
+        if (monsterAnim.GetCurrentAnimatorStateInfo(0).IsName("MonsterPunch"))
         {
+            punchState = PunchStateEnum.MidPunch;
+        }
+        if (!monsterAnim.GetCurrentAnimatorStateInfo(0).IsName("MonsterPunch") && punchState == PunchStateEnum.MidPunch)
+        {
+            Debug.Log("Releasing punch");
             canMove = true;
+            punchState = PunchStateEnum.PunchEnded;
         }
     }
 
