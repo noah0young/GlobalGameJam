@@ -9,13 +9,14 @@ public class Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         open = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        openDoor();
     }
 
     // Opens the door when run

@@ -6,6 +6,7 @@ public class BossZone : MonoBehaviour
 {
     public bool bossDefeated;
     public GameObject lever;
+    public string[] affectedTags;
 
     private void Update()
     {
@@ -21,9 +22,12 @@ public class BossZone : MonoBehaviour
         {
             for(int i = 0; i < transform.childCount; i++)
             {
-                if(transform.GetChild(i).CompareTag("Pillar"))
+                for (int j = 0; j < affectedTags.Length; j++)
                 {
-                    transform.GetChild(i).gameObject.SetActive(true);
+                    if (transform.GetChild(i).CompareTag(affectedTags[j]))
+                    {
+                        transform.GetChild(i).gameObject.SetActive(true);
+                    }
                 }
             }
         }

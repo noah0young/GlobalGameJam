@@ -8,6 +8,9 @@ TagManager:
   - SwitchPortal
   - Ground
   - Pillar
+  - Door
+  - Projectile
+  - Witch
   layers:
   - Default
   - TransparentFX
@@ -18,7 +21,7 @@ TagManager:
   - 
   - 
   - Ground
-  - 
+  - Witch
   - 
   - 
   - 

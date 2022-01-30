@@ -368,7 +368,8 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Spikes")
+        if (collision.transform.tag == "Spikes" || collision.transform.tag == "Witch" ||
+            collision.transform.tag == "Projectile")
         {
             LoseHealth();
             BounceBack();

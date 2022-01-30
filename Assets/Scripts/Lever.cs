@@ -26,7 +26,10 @@ public class Lever : MonoBehaviour
             {
                 pairedObject.SetActive(false);
             }
-
+            else if (pairedObject.CompareTag("Door"))
+            {
+                pairedObject.GetComponent<Door>().open = true;
+            }
             //other stuff for doors, presumably
         }
     }
